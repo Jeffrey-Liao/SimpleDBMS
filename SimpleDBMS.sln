@@ -4,8 +4,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.10.35013.160
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SimpleDBMS", "SimpleDBMS\SimpleDBMS.vcxproj", "{F0113306-5BD8-4E24-AE14-E4F1805B1CB7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F19ACB12-32A8-4000-971E-300F3429E3B2} = {F19ACB12-32A8-4000-971E-300F3429E3B2}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DataStorageUnit", "DataStorageUnit\DataStorageUnit.vcxproj", "{F19ACB12-32A8-4000-971E-300F3429E3B2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A5E9996B-5BF8-48C5-8DBD-4875A249BCC9} = {A5E9996B-5BF8-48C5-8DBD-4875A249BCC9}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "InformationUnit", "InformationUnit\InformationUnit.vcxproj", "{A5E9996B-5BF8-48C5-8DBD-4875A249BCC9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,6 +39,14 @@ Global
 		{F19ACB12-32A8-4000-971E-300F3429E3B2}.Release|x64.Build.0 = Release|x64
 		{F19ACB12-32A8-4000-971E-300F3429E3B2}.Release|x86.ActiveCfg = Release|Win32
 		{F19ACB12-32A8-4000-971E-300F3429E3B2}.Release|x86.Build.0 = Release|Win32
+		{A5E9996B-5BF8-48C5-8DBD-4875A249BCC9}.Debug|x64.ActiveCfg = Debug|x64
+		{A5E9996B-5BF8-48C5-8DBD-4875A249BCC9}.Debug|x64.Build.0 = Debug|x64
+		{A5E9996B-5BF8-48C5-8DBD-4875A249BCC9}.Debug|x86.ActiveCfg = Debug|Win32
+		{A5E9996B-5BF8-48C5-8DBD-4875A249BCC9}.Debug|x86.Build.0 = Debug|Win32
+		{A5E9996B-5BF8-48C5-8DBD-4875A249BCC9}.Release|x64.ActiveCfg = Release|x64
+		{A5E9996B-5BF8-48C5-8DBD-4875A249BCC9}.Release|x64.Build.0 = Release|x64
+		{A5E9996B-5BF8-48C5-8DBD-4875A249BCC9}.Release|x86.ActiveCfg = Release|Win32
+		{A5E9996B-5BF8-48C5-8DBD-4875A249BCC9}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

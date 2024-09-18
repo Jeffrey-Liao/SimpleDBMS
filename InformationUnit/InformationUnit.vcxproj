@@ -18,17 +18,11 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="includes\Attributes.h" />
-    <ClInclude Include="includes\DataCenter.h" />
-    <ClInclude Include="includes\Record.h" />
-    <ClInclude Include="includes\Type.h" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{f19acb12-32a8-4000-971e-300f3429e3b2}</ProjectGuid>
-    <RootNamespace>DataStorageUnit</RootNamespace>
+    <ProjectGuid>{a5e9996b-5bf8-48c5-8dbd-4875a249bcc9}</ProjectGuid>
+    <RootNamespace>InformationUnit</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -77,14 +71,13 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>D:\Code\C++\SimpleDBMS\InformationUnit\include;D:\Code\C++\SimpleDBMS\DataStorageUnit\includes;$(IncludePath)</IncludePath>
-    <OutDir>D:\Code\C++\SimpleDBMS\DataStorageUnit\lib\</OutDir>
-    <LibraryPath>D:\Code\C++\SimpleDBMS\InformationUnit\lib;$(LibraryPath)</LibraryPath>
+    <ReferencePath>D:\Code\C++\Manipulate\InformationUnit\include;$(ReferencePath)</ReferencePath>
+    <OutDir>D:\Code\C++\Manipulate\InformationUnit\lib\</OutDir>
+    <IncludePath>D:\Code\C++\Manipulate\InformationUnit\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>D:\Code\C++\SimpleDBMS\InformationUnit\include;D:\Code\C++\SimpleDBMS\DataStorageUnit\includes;$(IncludePath)</IncludePath>
-    <OutDir>D:\Code\C++\SimpleDBMS\DataStorageUnit\lib\</OutDir>
-    <LibraryPath>D:\Code\C++\SimpleDBMS\InformationUnit\lib;$(LibraryPath)</LibraryPath>
+    <ReferencePath>D:\Code\C++\Manipulate\InformationUnit\include;$(ReferencePath)</ReferencePath>
+    <OutDir>D:\Code\C++\Manipulate\InformationUnit\lib\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -120,9 +113,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc11</LanguageStandard_C>
-      <CompileAs>Default</CompileAs>
-      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -138,9 +130,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <CompileAs>Default</CompileAs>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc11</LanguageStandard_C>
-      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -150,6 +141,22 @@
       <AdditionalDependencies />
     </Link>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="include\ClassInfor.h" />
+    <ClInclude Include="include\common.h" />
+    <ClInclude Include="include\CommonException.h" />
+    <ClInclude Include="include\FatalException.h" />
+    <ClInclude Include="include\Infor.h" />
+    <ClInclude Include="include\InvArgumentE.h" />
+    <ClInclude Include="include\InvOperationE.h" />
+    <ClInclude Include="include\LiaoException.h" />
+    <ClInclude Include="LiaoInfor.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="source\ClassInforDef.cpp" />
+    <ClCompile Include="source\InforDef.cpp" />
+    <ClCompile Include="source\LiaoExceptionDef.cpp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -15,7 +15,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="includes\CommonIncludes.h">
+    <ClInclude Include="includes\Record.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\Attributes.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\Type.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\DataCenter.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

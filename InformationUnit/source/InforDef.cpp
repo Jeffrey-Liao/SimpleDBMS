@@ -2,15 +2,15 @@
 namespace liaoInfor
 {
 	using string = std::string;
-	constexpr const char* Infor::getLabel()const
+	const char* Infor::getLabel()const
 	{
-		if (currentType == Common)
+		if (currentType == InforType::Common)
 			return INFORLABEL;
 		else if (currentType == InforType::Debug)
 			return DEBUGLABEL;
-		else if (currentType == Error)
+		else if (currentType == InforType::Error)
 			return ERRORLABEL;
-		else if (currentType == Exception)
+		else if (currentType == InforType::Exception)
 			return EXCEPTIONLABEL;
 		else
 			return "";
@@ -118,6 +118,7 @@ namespace liaoInfor
 		if (!Cache.empty())
 		{
 			cout << Cache;
+			cout << "\n";
 			str = Cache;
 			Cache.clear();
 			this->bits = 0;

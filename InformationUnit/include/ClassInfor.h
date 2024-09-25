@@ -15,7 +15,7 @@ namespace liaoInfor
 		using string = std::string;
 		static ClassInfor* instance;
 		void reallocate(const string& classInfor);
-		constexpr void reconstruct(const string& classInfor)
+		void reconstruct(const string& classInfor)
 		{
 			className = classInfor.substr(0,classInfor.find_last_of("::")-1);
 			className = className.substr(className.find_last_of(' ')+1);

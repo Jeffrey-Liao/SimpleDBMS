@@ -3,7 +3,6 @@
 
 #include "common.h"
 #include "ClassInfor.h"
-#include <format>
 namespace liaoInfor
 {
 #define MESSAGEBREAK ""
@@ -34,7 +33,6 @@ namespace liaoInfor
 	{
 	protected:
 		using string = std::string;
-		using enum InforType;
 		InforType currentType;
 		mutable char bits;
 		string Cache;
@@ -42,10 +40,10 @@ namespace liaoInfor
 		{
 			cout << "\n";
 		}
-		constexpr const char* getLabel()const;
+		const char* getLabel()const;
 		constexpr bool whenActive()const;
 	public:
-		Infor(InforType currentType = Common);
+		Infor(InforType currentType = InforType::Common);
 		Infor(InforType currentType, bool useDefaultProcess);
 		static string getTime(/*only show date if it is true*/bool onlyDate = false) noexcept
 		{
@@ -142,5 +140,11 @@ namespace liaoInfor
 		Infor& head();
 		~Infor();
 	};
+}
+static void newCStr(char*& newStr,const char* source)
+{
+	size_t size = strlen(source);
+	newStr = new char[size];
+	memcpy(newStr, source, size);
 }
 #endif

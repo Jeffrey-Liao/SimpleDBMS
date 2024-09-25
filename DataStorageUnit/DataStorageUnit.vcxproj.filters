@@ -15,17 +15,31 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="includes\Record.h">
+    <ClInclude Include="includes\Table.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="includes\Attributes.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="includes\DDL.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\TypePlus.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
     <ClInclude Include="includes\Type.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="includes\DataCenter.h">
+    <ClInclude Include="includes\FileManager.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="includes\DataFile.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Test.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,7 +1,6 @@
-#pragma once
+#include "Infor.h"
 namespace liaoStorage
 {
-#include<string>
 	enum class TypeTag : char
 	{
 		Null,
@@ -25,376 +24,113 @@ namespace liaoStorage
 	using int8 = long long;
 	using real4 = float;
 	using real8 = double;
-	constexpr static int1 typeTagToByteSize(TypeTag tag)
+	struct chars
 	{
-		if (tag == TypeTag::Int1)
-			return sizeof(int1);
-		else if (tag == TypeTag::Int2)
-			return sizeof(int2);
-		else if (tag == TypeTag::Int4)
-			return sizeof(int4);
-		else if (tag == TypeTag::Int8)
-			return sizeof(int8);
-		else if (tag == TypeTag::Real4)
-			return sizeof(real4);
-		else if (tag == TypeTag::Real8)
-			return sizeof(real8);
-	}
-	static TypeTag typeId2TypeTag(std::string&& typeId)
-	{
-	}
-	class String
-	{
-		char* str;
-		size_t size;
-	public:
-		String(size_t size)
-			:size(size), str(NULL)
-		{}
-		String(const char* str)
-			:size(strlen(str))
-		{
-			str = new char[size + 1];
-			strcpy_s(this->str, size, str);
-		}
-		size_t len()
-		{
-			return size - 1;
-		}
-		bool compare(const String& object)
-		{
-			if (size != object.size)
-				return false;
-			return strcmp(str, object.str) == 0;
-		}
-		bool operator==(const String& object)
-		{
-			return compare(object);
-		}
-		~String()
-		{
-			if (str != NULL)
-				delete str;
-		}
+		char* space;
+		size_t capcity;
 	};
 	class Type
 	{
-		using enum TypeTag;
-		int number;
-		TypeTag tag;
+	protected:
 		void* space;
-		void newSpace()
-		{
-			if (tag == Int1)
-				space = new char;
-			else if (tag == Int2)
-				space = new short int;
-			else if (tag == Int4)
-				space = new int;
-			else if (tag == Int8)
-				space = new long long;
-			else if (tag == Real4)
-				space = new real4;
-			else if (tag == Real8)
-				space = new real8;
-			else if (tag == Char)
-				space = new char[number + 1];
-		}
 	public:
 		Type()
-			:tag(Null), space(nullptr), number(0)
+			:space(nullptr)
 		{}
-		Type(TypeTag tag,const int number=0)
-			:tag(tag),space(nullptr),number(number)
+		Type(void* ptr, int size)
+		{
+			this->space = new char[size];
+			memcpy(space, ptr, size);
+		}
+		Type(Type* ptr)
+		{
+			this->space = ptr->space;
+			ptr->space = nullptr;
+		}
+		Type(const Type& object)
+		{
+			if (!object.isNull())
+			{
+				int size = _msize(object.space);
+				space = new char[size];
+				memcpy(space, object.space, size);
+			}
+		}
+		Type(Type& object)
+		{
+			space = object.space;
+			object.space = nullptr;
+		}
+		Type(Type&& object) noexcept
+			:Type(object)
 		{}
-		Type(TypeTag tag,const void* newData,const int number = 0)
-			:tag(tag), space(nullptr), number(number)
-		{
-			assign(newData);
-		}
-		void changeTag(TypeTag newTag)
-		{
-			tag = newTag;
-			delete space;
-			space = nullptr;
-		}
-		bool isNull()
+
+		bool isNull()const
 		{
 			return space == nullptr;
 		}
-		TypeTag getTag()
+		DYNAMIC
+			T& get()
 		{
-			return tag;
+			return *(T*)space;
 		}
-		void assign(const void* data)
+		char* getStr()
 		{
-			if(space == nullptr)
-				newSpace();
-			if (tag == Int1)
-				*(char*)space = *(char*)data;
-			else if (tag == Int2)
-				*(short int*)space = *(short int*)data;
-			else if (tag == Int4)
-				*(int*)space = *(int*)data;
-			else if (tag == Int8)
-				*(long long*)space = *(long long*)data;
-			else if (tag == Real4)
-				*(real4*)space = *(real4*)data;
-			else if (tag == Real8)
-				*(real8*)space = *(real8*)data;
-			else if (tag == Char && number != 0)
-				strcpy_s((char*)space, number, (char*)data);
+			return (char*)space;
 		}
-		void add(const void* data)
+		DYNAMIC
+			const T& get()const
 		{
-			if (tag == Int1)
-				*(int1*)space += *(int1*)data;
-			else if (tag == Int2)
-				*(int2*)space += *(int2*)data;
-			else if (tag == Int4)
-				*(int4*)space += *(int4*)data;
-			else if (tag == Int8)
-				*(int8*)space += *(int8*)data;
-			else if (tag == Real4)
-				*(real4*)space += *(real4*)data;
-			else if (tag == Real8)
-				*(real8*)space += *(real8*)data;
+			return *(T*)space;
 		}
-		void minus(const void* data)
+		void set(void* data)
 		{
-			if (tag == Int1)
-				*(int1*)space -= *(int1*)data;
-			else if (tag == Int2)
-				*(int2*)space -= *(int2*)data;
-			else if (tag == Int4)
-				*(int4*)space -= *(int4*)data;
-			else if (tag == Int8)
-				*(int8*)space -= *(int8*)data;
-			else if (tag == Real4)
-				*(real4*)space -= *(real4*)data;
-			else if (tag == Real8)
-				*(real8*)space -= *(real8*)data;
+			space = data;
 		}
-		void multiply(const void* data)
+		DYNAMIC
+			void set(T& data)
 		{
-			if (tag == Int1)
-				*(int1*)space *= *(int1*)data;
-			else if (tag == Int2)
-				*(int2*)space *= *(int2*)data;
-			else if (tag == Int4)
-				*(int4*)space *= *(int4*)data;
-			else if (tag == Int8)
-				*(int8*)space *= *(int8*)data;
-			else if (tag == Real4)
-				*(real4*)space *= *(real4*)data;
-			else if (tag == Real8)
-				*(real8*)space *= *(real8*)data;
+			if (isNull())
+				space = new char[sizeof(T)];
+			memcpy(space, &data, sizeof(T));
 		}
-		void divide(const void* data)
+		DYNAMIC
+			void set(T&& data)
 		{
-			if (tag == Int1)
-				*(int1*)space /= *(int1*)data;
-			else if (tag == Int2)
-				*(int2*)space /= *(int2*)data;
-			else if (tag == Int4)
-				*(int4*)space /= *(int4*)data;
-			else if (tag == Int8)
-				*(int8*)space /= *(int8*)data;
-			else if (tag == Real4)
-				*(real4*)space /= *(real4*)data;
-			else if (tag == Real8)
-				*(real8*)space /= *(real8*)data;
+			this->set(data);
 		}
-		void assign(const Type& data)
+		int size()
 		{
-			assign(data.space);
+			if (isNull())
+				return 0;
+			return _msize(space);
 		}
-		void add(const Type& data)
+		Type& operator=(void* data)
 		{
-			if (tag == Int1)
-				*(int1*)space += *(int1*)data.space;
-			else if (tag == Int2)
-				*(int2*)space += *(int2*)data.space;
-			else if (tag == Int4)
-				*(int4*)space += *(int4*)data.space;
-			else if (tag == Int8)
-				*(int8*)space += *(int8*)data.space;
-			else if (tag == Real4)
-				*(real4*)space += *(real4*)data.space;
-			else if (tag == Real8)
-				*(real8*)space += *(real8*)data.space;
-		}
-		void minus(const Type& data)
-		{
-			if (tag == Int1)
-				*(int1*)space -= *(int1*)data.space;
-			else if (tag == Int2)
-				*(int2*)space -= *(int2*)data.space;
-			else if (tag == Int4)
-				*(int4*)space -= *(int4*)data.space;
-			else if (tag == Int8)
-				*(int8*)space -= *(int8*)data.space;
-			else if (tag == Real4)
-				*(real4*)space -= *(real4*)data.space;
-			else if (tag == Real8)
-				*(real8*)space -= *(real8*)data.space;
-		}
-		void multiply(const Type& data)
-		{
-			if (tag == Int1)
-				*(int1*)space *= *(int1*)data.space;
-			else if (tag == Int2)
-				*(int2*)space *= *(int2*)data.space;
-			else if (tag == Int4)
-				*(int4*)space *= *(int4*)data.space;
-			else if (tag == Int8)
-				*(int8*)space *= *(int8*)data.space;
-			else if (tag == Real4)
-				*(real4*)space *= *(real4*)data.space;
-			else if (tag == Real8)
-				*(real8*)space *= *(real8*)data.space;
-		}
-		void divide(const Type& data)
-		{
-			if (tag == Int1)
-				*(int1*)space /= *(int1*)data.space;
-			else if (tag == Int2)
-				*(int2*)space /= *(int2*)data.space;
-			else if (tag == Int4)
-				*(int4*)space /= *(int4*)data.space;
-			else if (tag == Int8)
-				*(int8*)space /= *(int8*)data.space;
-			else if (tag == Real4)
-				*(real4*)space /= *(real4*)data.space;
-			else if (tag == Real8)
-				*(real8*)space /= *(real8*)data.space;
-		}
-		int4 compare(const void* data)
-		{
-			int4 result = 0;
-			if (tag == Int1)
+			if (data != nullptr)
 			{
-				result = *(int1*)space > *(int1*)data ? 1 : 0;
-				result = *(int1*)space < *(int1*)data ? -1 : 0;
+				int size = _msize(data);
+				if (isNull())
+					space = new char[size];
+				memcpy(space, data, size);
 			}
-			else if (tag == Int2)
+			return *this;
+		}
+		Type& operator=(Type& data)
+		{
+			if (!data.isNull())
 			{
-				result = *(int2*)space > *(int2*)data ? 1 : 0;
-				result = *(int2*)space < *(int2*)data ? -1 : 0;
+				space = data.space;
+				data.space = nullptr;
 			}
-			else if (tag == Int4)
-			{
-				result = *(int4*)space > *(int4*)data ? 1 : 0;
-				result = *(int4*)space < *(int4*)data ? -1 : 0;
-			}
-			else if (tag == Int8)
-			{
-				result = *(int8*)space > *(int8*)data ? 1 : 0;
-				result = *(int8*)space < *(int8*)data ? -1 : 0;
-			}
-			else if (tag == Real4)
-			{
-				result = *(real4*)space > *(real4*)data ? 1 : 0;
-				result = *(real4*)space < *(real4*)data ? -1 : 0;
-			}
-			else if (tag == Real8)
-			{
-				result = *(real8*)space > *(real8*)data ? 1 : 0;
-				result = *(real8*)space < *(real8*)data ? -1 : 0;
-			}
-			return result;
-		}
-		int4 compare(const Type& data)
-		{
-			return compare(data.space);
-		}
-		bool operator==(const void* data)
-		{
-			return compare(data) == 0;
-		}
-		bool operator<=(const void* data)
-		{
-			return compare(data) == -1;
-		}
-		bool operator>=(const void* data)
-		{
-			return compare(data) == 1;
-		}
-		Type& operator=(const void* data)
-		{
-			assign(data);
-			return *this;
-		}
-		Type& operator+=(const void* data)
-		{
-			add(data);
-			return *this;
-		}
-		Type& operator-=(const void* data)
-		{
-			minus(data);
-			return *this;
-		}
-		Type& operator*=(const void* data)
-		{
-			multiply(data);
-			return *this;
-		}
-		Type& operator/=(const void* data)
-		{
-			divide(data);
-			return *this;
-		}
-		bool operator==(const Type& data)
-		{
-			return compare(data) == 0;
-		}
-		bool operator<=(const Type& data)
-		{
-			return compare(data) == -1;
-		}
-		bool operator>=(const Type& data)
-		{
-			return compare(data) == 1;
-		}
-		Type& operator=(const Type& data)
-		{
-			assign(data);
-			return *this;
-		}
-		Type& operator+=(const Type& data)
-		{
-			add(data);
-			return *this;
-		}
-		Type& operator-=(const Type& data)
-		{
-			minus(data);
-			return *this;
-		}
-		Type& operator*=(const Type& data)
-		{
-			multiply(data);
-			return *this;
-		}
-		Type& operator/=(const Type& data)
-		{
-			divide(data);
 			return *this;
 		}
 		~Type()
 		{
-			if (tag == Char || tag == VarChar)
-			{
-				if (space != nullptr)
-					delete[] space;
-			}
-			else
-			{
-				if (space != nullptr)
-					delete space;
-			}
+			if (space != nullptr)
+				delete[] space;
 		}
+		static Type null;
 	};
-	
+
 }

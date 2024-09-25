@@ -1,12 +1,134 @@
 #pragma once
-#include "TypePlus.h"
-#include <vector>
-#include <list>
-#define NAMESIZE 50
-/*
+#include"Infor.h"
+namespace liaoStorage
+{
+	enum class TypeTag : char
+	{
+		Null,
+		Int4,
+		Int8,
+		Int2,
+		Int1,
+		Char,
+		VarChar,//
+		Bool,//
+		Date,//
+		Real4,
+		Real8,
+		Decimal,//
+		Int16,//
+		Int32//
+	};
+	using int1 = char;
+	using int2 = short int;
+	using int4 = int;
+	using int8 = long long;
+	using real4 = float;
+	using real8 = double;
+	constexpr static int1 typeTagToByteSize(TypeTag tag)
+	{
+		if (tag == TypeTag::Int1)
+			return sizeof(int1);
+		else if (tag == TypeTag::Int2)
+			return sizeof(int2);
+		else if (tag == TypeTag::Int4)
+			return sizeof(int4);
+		else if (tag == TypeTag::Int8)
+			return sizeof(int8);
+		else if (tag == TypeTag::Real4)
+			return sizeof(real4);
+		else if (tag == TypeTag::Real8)
+			return sizeof(real8);
+	}
+	static TypeTag typeId2TypeTag(std::string&& typeId)
+	{
+	}
+	class String
+	{
+		char* str;
+		size_t size;
+	public:
+		String(size_t size)
+			:size(size), str(NULL)
+		{}
+		String(const char* str)
+			:size(strlen(str))
+		{
+			str = new char[size + 1];
+			strcpy_s(this->str, size, str);
+		}
+		size_t len()
+		{
+			return size - 1;
+		}
+		bool compare(const String& object)
+		{
+			if (size != object.size)
+				return false;
+			return strcmp(str, object.str) == 0;
+		}
+		bool operator==(const String& object)
+		{
+			return compare(object);
+		}
+		~String()
+		{
+			if (str != NULL)
+				delete str;
+		}
+	};
+	class Type
+	{
+		using enum TypeTag;
+		int number;
+		TypeTag tag;
+		void* space;
+		void newSpace()
+		{
+			if (tag == Int1)
+				space = new char;
+			else if (tag == Int2)
+				space = new short int;
+			else if (tag == Int4)
+				space = new int;
+			else if (tag == Int8)
+				space = new long long;
+			else if (tag == Real4)
+				space = new real4;
+			else if (tag == Real8)
+				space = new real8;
+			else if (tag == Char)
+				space = new char[number + 1];
+		}
+	public:
+		Type()
+			:tag(Null), space(nullptr), number(0)
+		{}
+		Type(TypeTag tag,const int number=0)
+			:tag(tag),space(nullptr),number(number)
+		{}
+		Type(TypeTag tag,const void* newData,const int number = 0)
+			:tag(tag), space(nullptr), number(number)
+		{
+			assign(newData);
+		}
+		void changeTag(TypeTag newTag)
+		{
+			tag = newTag;
+			delete space;
+			space = nullptr;
+		}
+		bool isNull()
+		{
+			return space == nullptr;
+		}
+		TypeTag getTag()
+		{
+			return tag;
+		}
 		void assign(const void* data)
 		{
-			if (space == nullptr)
+			if(space == nullptr)
 				newSpace();
 			if (tag == Int1)
 				*(char*)space = *(char*)data;
@@ -20,8 +142,8 @@
 				*(real4*)space = *(real4*)data;
 			else if (tag == Real8)
 				*(real8*)space = *(real8*)data;
-			else if (tag == Char)
-				strcpy_s((char*)space, _msize(space), (char*)data);
+			else if (tag == Char && number != 0)
+				strcpy_s((char*)space, number, (char*)data);
 		}
 		void add(const void* data)
 		{
@@ -83,11 +205,11 @@
 			else if (tag == Real8)
 				*(real8*)space /= *(real8*)data;
 		}
-		void assign(const TypePlus& data)
+		void assign(const Type& data)
 		{
 			assign(data.space);
 		}
-		void add(const TypePlus& data)
+		void add(const Type& data)
 		{
 			if (tag == Int1)
 				*(int1*)space += *(int1*)data.space;
@@ -102,7 +224,7 @@
 			else if (tag == Real8)
 				*(real8*)space += *(real8*)data.space;
 		}
-		void minus(const TypePlus& data)
+		void minus(const Type& data)
 		{
 			if (tag == Int1)
 				*(int1*)space -= *(int1*)data.space;
@@ -117,7 +239,7 @@
 			else if (tag == Real8)
 				*(real8*)space -= *(real8*)data.space;
 		}
-		void multiply(const TypePlus& data)
+		void multiply(const Type& data)
 		{
 			if (tag == Int1)
 				*(int1*)space *= *(int1*)data.space;
@@ -132,7 +254,7 @@
 			else if (tag == Real8)
 				*(real8*)space *= *(real8*)data.space;
 		}
-		void divide(const TypePlus& data)
+		void divide(const Type& data)
 		{
 			if (tag == Int1)
 				*(int1*)space /= *(int1*)data.space;
@@ -182,7 +304,7 @@
 			}
 			return result;
 		}
-		int4 compare(const TypePlus& data)
+		int4 compare(const Type& data)
 		{
 			return compare(data.space);
 		}
@@ -198,117 +320,81 @@
 		{
 			return compare(data) == 1;
 		}
-		TypePlus& operator=(const void* data)
+		Type& operator=(const void* data)
 		{
 			assign(data);
 			return *this;
 		}
-		TypePlus& operator+=(const void* data)
+		Type& operator+=(const void* data)
 		{
 			add(data);
 			return *this;
 		}
-		TypePlus& operator-=(const void* data)
+		Type& operator-=(const void* data)
 		{
 			minus(data);
 			return *this;
 		}
-		TypePlus& operator*=(const void* data)
+		Type& operator*=(const void* data)
 		{
 			multiply(data);
 			return *this;
 		}
-		TypePlus& operator/=(const void* data)
+		Type& operator/=(const void* data)
 		{
 			divide(data);
 			return *this;
 		}
-		bool operator==(const TypePlus& data)
+		bool operator==(const Type& data)
 		{
 			return compare(data) == 0;
 		}
-		bool operator<=(const TypePlus& data)
+		bool operator<=(const Type& data)
 		{
 			return compare(data) == -1;
 		}
-		bool operator>=(const TypePlus& data)
+		bool operator>=(const Type& data)
 		{
 			return compare(data) == 1;
 		}
-		TypePlus& operator=(const TypePlus& data)
+		Type& operator=(const Type& data)
 		{
 			assign(data);
 			return *this;
 		}
-		TypePlus& operator+=(const TypePlus& data)
+		Type& operator+=(const Type& data)
 		{
 			add(data);
 			return *this;
 		}
-		TypePlus& operator-=(const TypePlus& data)
+		Type& operator-=(const Type& data)
 		{
 			minus(data);
 			return *this;
 		}
-		TypePlus& operator*=(const TypePlus& data)
+		Type& operator*=(const Type& data)
 		{
 			multiply(data);
 			return *this;
 		}
-		TypePlus& operator/=(const TypePlus& data)
+		Type& operator/=(const Type& data)
 		{
 			divide(data);
 			return *this;
 		}
-*/
-namespace liaoStorage
-{
-	using namespace std;
-	Type Type::null;
-	class Attribute
-	{
-		char name[NAMESIZE];
-		std::vector<Type> data;
-	public:
-		const TypeTag tag;
-		Attribute()
-			:tag(TypeTag::Null)
-		{}
-		Attribute(const char* name,TypeTag tag)
-			:tag(tag)
+		~Type()
 		{
-			int size = strlen(name);
-			if(size > NAMESIZE)
-				strcpy_s(this->name,size, name);
+			if (tag == Char || tag == VarChar)
+			{
+				if (space != nullptr)
+					delete[] space;
+			}
 			else
-				strcpy_s(this->name, NAMESIZE, name);
-		}
-		void rename(const char* newName)
-		{
-			strcpy_s(this->name, strlen(name), newName);
-		}
-		const char* getName()
-		{
-			return name;
-		}
-		Type& add(const TypePlus& data)
-		{
-			if (data.tag != tag)
-				return Type::null;
-			else
-				this->data.push_back(data);
-		}
-		Type& get(size_t index)
-		{
-			return data[index];
-		}
-		size_t size()
-		{
-			return data.size();
-		}
-		Type& operator[](size_t index)
-		{
-			return get(index);
+			{
+				if (space != nullptr)
+					delete space;
+			}
 		}
 	};
+	
 }

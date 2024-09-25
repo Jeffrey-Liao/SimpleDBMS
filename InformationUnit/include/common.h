@@ -4,8 +4,8 @@
 #include<fstream>
 #include <string>
 #include <vector>
+#include <typeinfo>
 #include<list>
-#include <format>
 #include <array>
 #include<algorithm>
 #include <initializer_list>
@@ -18,9 +18,5 @@
 #define DYNAMICS template<class T,class NodeType>
 #define INTERFACE class
 #define STD std::
-DYNAMIC
-static std::string StdToStr(T& stdContainer)
-{
-
-}
+#define MAXPAGESIZE 5000
 #endif

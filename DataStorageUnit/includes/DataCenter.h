@@ -17,7 +17,6 @@ namespace liaoStorage
 			:width(typeTagToByteSize(type)),size(PAGESIZE)
 		{
 			data = new char[width * size];
-			
 		}
 		void* take(size_t index)
 		{
